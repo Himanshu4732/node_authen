@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const userModel = require('./models/user');
 
 const cookieParser = require('cookie-parser');
 const path = require('path');
@@ -11,7 +12,7 @@ app.use(express.urlencoded({extended: true}))
 app.use(cookieParser());
 
 app.get('/', function (req, res) {
-    res.send('Welcome');
+    res.render('index');
 
 });
 
