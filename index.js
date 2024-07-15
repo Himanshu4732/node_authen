@@ -31,10 +31,34 @@ bcrypt.genSalt(10, function (err, salt) {
         let token = jwt.sign({email},"asdklkl")
         res.cookie('token', token)
 
-        res.send(createdUser);
+       res.redirect("/login")
     })
 })
    
 });
 
+app.get('/login', function(req,res){
+    res.render('login');
+});
+app.post('/login',async function(req,res){
+   let user = await userModel.findOne({email:req.body.email})
+   bcrypt.compare(req.body.password, user.password, function(err,result){
+    if(result){
+        let token = jwt.sign({email:user.email},"asdklkl")
+        res.cookie('token', token)
+        res.send("you are lodded in ")
+    }
+    else{
+        res.send("invalid credentials")
+    }
+
+   })
+
+
+});
+
+app.get('/logout', function(req, res) {
+    res.cookie('token',"")
+    res.redirect('/');
+})
 app.listen(3000)
